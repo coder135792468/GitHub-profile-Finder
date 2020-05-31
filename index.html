@@ -267,16 +267,45 @@
 
         <div id="root"></div>
         <script type="text/babel">
-class User extends React.Component{
-    state:{
-        
-    }
-    render(){
-        return(
-           <div>
-           </div> 
-        )
-    }
+const SingleUser = ({
+name,
+bio,
+avatar,
+location,
+followers,
+following,
+}) =>{
+
+//const [see,setSee] = React.useState(false);
+
+const hideBox =()=>{
+    
+};
+/*
+   return (
+      <div className="userCard">
+        <div className="header_user"><span className="fa fa-close"></span></div>
+            <div className="pic">                
+            </div>
+            <h2 className="name">Coder</h2>   
+            <p className="bio">NoBio</p>
+            <p className="location">Ludhiana</p>
+            <div className="follower">
+                <button className="followers">11 Followers <i className="fa fa-users"></i></button>
+                <button className="following">9 Following <i className="fa fa-users"></i></button>
+            </div>
+       <button className="visit_profile">View Profile   <i className="fa fa-arrow-right"></i></button>            
+        </div>
+    )
+*/    
+}
+
+const Alert =()=>{    
+   return(
+         <div className="toast">
+        <p><span style={{fontSize:"20px"}} className="fa fa-info-circle"></span><span>Enter Something</span></p>
+         </div> 
+  )    
 }
 const Loader =()=>{
     return (
@@ -322,22 +351,26 @@ const Users =({loading,users,hasUser})=>{
 class SearchBar extends React.Component{
    state={
         text:"",
+        showAlert:false,
    }
        setTxtValue=(e)=>this.setState({text:e.target.value});   
    searchUsers = () =>{
        if(this.state.text){
                               this.props.searchUser(this.state.text);
-     this.setState({text:""})
+ this.setState({text:"",showAlert:false})
        }
        else{
-           alert("Enter Required Data..")
+          this.setState({showAlert:true})
+          
+          setTimeout(()=>this.setState({showAlert:false}),1500)
        }
    }
    render(){
       return(
           <div className="searchCon">
             <input type="text" value={this.state.text} placeholder="Search User..." onChange={this.setTxtValue}/>
-            <button onClick={this.searchUsers}>Search</button>                        
+            <button onClick={this.searchUsers}>Search</button>
+      {this.state.showAlert&&<Alert />}                      
           </div>
        )
    }
@@ -375,6 +408,14 @@ this.setState({loading:true,hasUser:false});
     })
         
    }
+   
+   
+searchSingleUser=(e)=>{ 
+   this.setState({loading:true,hasUser:false})
+ 
+    
+}   
+   
    searchUser=(e)=>{      
 this.setState({loading:true,hasUser:false})
          fetch(`https://cors-anywhere.herokuapp.com/https://api.github.com/search/users?q=${e}&client_id=7f2f05541ad894a31576&client_secret=d2e49ac75fc0ad94cf59bb8245129ae3bd55ad83`,{
@@ -413,7 +454,7 @@ this.setState({loading:true,hasUser:false})
         )
     }
 }
-document.getElementsByClassName("loader")[0].style.display = "none"
+document.getElementsByClassName("loader")[0].style.display = "none";
 ReactDOM.render(
     <App />,
     document.getElementById("root")
